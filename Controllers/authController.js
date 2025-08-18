@@ -37,22 +37,34 @@ exports.confirmSignUp = async(req,res) => {
 
 exports.login = async(req,res) => {
     try{
-    const{username,password}= req.body
-    const result = await authService.login({username,password})
+        const { username, password } = req.body;
+        const result = await authService.login({ username, password });
 
-    req.session.userInfo = {
-        username,
-        idToken: result.IdToken,
-        accessToken: result.AccessToken,
-        refreshToken: result.RefreshToken,
-    }
+        // Cognito returns tokens under AuthenticationResult
+        const tokens = result.AuthenticationResult;
 
-    res.status(201).json({ message: "Succesfully logged in"})
+        req.session.userInfo = {
+            username,
+            idToken: tokens.IdToken,
+            accessToken: tokens.AccessToken,
+            refreshToken: tokens.RefreshToken,
+        };
+
+        // Send the session cookie explicitly (for Postman/manual testing)
+        res.cookie('connect.sid', req.sessionID, {
+            httpOnly: true,
+            secure: false, // set to true in production with HTTPS
+            sameSite: "lax",
+        });
+
+        res.status(201).json({ message: "Successfully logged in" });
 
     } catch(err) {
-        res.status(401).json({error: err.message})
+        res.status(401).json({ error: err.message });
     }
 }
+
+// ...existing code...
 
 exports.checkAuthStatus = async(req,res) => {
     try {
