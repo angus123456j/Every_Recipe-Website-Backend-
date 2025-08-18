@@ -56,6 +56,8 @@ exports.login = async(req,res) => {
                 console.error('Session save error:', err);
             } else {
                 console.log('Session saved successfully for user:', username);
+                console.log('Session ID after save:', req.sessionID);
+                console.log('Session data after save:', req.session);
             }
         });
 
@@ -70,10 +72,15 @@ exports.login = async(req,res) => {
 
 exports.checkAuthStatus = async(req,res) => {
     try {
-        console.log('Check auth status - Session ID:', req.sessionID);
-        console.log('Check auth status - Session exists:', !!req.session);
-        console.log('Check auth status - UserInfo exists:', !!req.session?.userInfo);
-        console.log('Check auth status - Username:', req.session?.userInfo?.username);
+        console.log('=== CHECK AUTH STATUS DEBUG ===');
+        console.log('Session ID:', req.sessionID);
+        console.log('Session exists:', !!req.session);
+        console.log('Full session object:', req.session);
+        console.log('UserInfo exists:', !!req.session?.userInfo);
+        console.log('Username:', req.session?.userInfo?.username);
+        console.log('Request headers:', req.headers);
+        console.log('Request cookies:', req.headers.cookie);
+        console.log('================================');
         
         if (req.session && req.session.userInfo) {
             res.json({
