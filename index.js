@@ -21,7 +21,7 @@ const userAuth = require("./middleware/userAuth");
 
 // CORS configuration to allow credentialed requests from the frontend
 const corsOptions = {
-  origin: process.env.CLIENT_URL || "http://localhost:3000",
+  origin: process.env.CLIENT_URL,
   credentials: true,
 };
 app.use(cors(corsOptions));
