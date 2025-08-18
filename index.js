@@ -44,8 +44,9 @@ app.use(
     }),
     cookie: {
       httpOnly: true,
-      secure: false, // set to true behind HTTPS in production
-      sameSite: "lax",
+      secure: process.env.NODE_ENV === 'production', // true in production with HTTPS
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // none for production cross-origin, lax for development
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
     },
   })
 )
@@ -144,7 +145,6 @@ app.post(
 // Check authentication status
 app.get(
   "/auth/check-status",
-  userAuth,
   authController.checkAuthStatus
 );
 
