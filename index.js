@@ -1,4 +1,5 @@
 require("dotenv").config();
+const MongoStore = require("connect-mongo");
 const express = require("express");
 const cors = require("cors");
 const session = require("express-session");
@@ -17,9 +18,10 @@ const { signUpSchema, loginSchema } = require("./middleware/userValidator");
 const uploadImage = require("./middleware/s3Uploader");
 const parseArray = require("./middleware/parseInput");
 const userAuth = require("./middleware/userAuth");
+
 // CORS configuration to allow credentialed requests from the frontend
 const corsOptions = {
-  origin: ["http://localhost:3000"],
+  origin: process.env.CLIENT_URL || "http://localhost:3000",
   credentials: true,
 };
 app.use(cors(corsOptions));
@@ -36,6 +38,10 @@ app.use(
     secret: "jkfwjenw",
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URI, // Use your MongoDB connection string
+      collectionName: "sessions",
+    }),
     cookie: {
       httpOnly: true,
       secure: false, // set to true behind HTTPS in production
