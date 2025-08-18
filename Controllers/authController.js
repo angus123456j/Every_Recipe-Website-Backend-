@@ -50,12 +50,7 @@ exports.login = async(req,res) => {
             refreshToken: tokens.RefreshToken,
         };
 
-        // Send the session cookie explicitly (for Postman/manual testing)
-        res.cookie('connect.sid', req.sessionID, {
-            httpOnly: true,
-            secure: false, // set to true in production with HTTPS
-            sameSite: "lax",
-        });
+        
 
         res.status(201).json({ message: "Successfully logged in" });
 
