@@ -50,16 +50,7 @@ exports.login = async(req,res) => {
             refreshToken: tokens.RefreshToken,
         };
 
-        // Save session explicitly to ensure it's persisted
-        req.session.save((err) => {
-            if (err) {
-                console.error('Session save error:', err);
-            } else {
-                console.log('Session saved successfully for user:', username);
-                console.log('Session ID after save:', req.sessionID);
-                console.log('Session data after save:', req.session);
-            }
-        });
+        
 
         res.status(201).json({ message: "Successfully logged in" });
 
@@ -72,16 +63,6 @@ exports.login = async(req,res) => {
 
 exports.checkAuthStatus = async(req,res) => {
     try {
-        console.log('=== CHECK AUTH STATUS DEBUG ===');
-        console.log('Session ID:', req.sessionID);
-        console.log('Session exists:', !!req.session);
-        console.log('Full session object:', req.session);
-        console.log('UserInfo exists:', !!req.session?.userInfo);
-        console.log('Username:', req.session?.userInfo?.username);
-        console.log('Request headers:', req.headers);
-        console.log('Request cookies:', req.headers.cookie);
-        console.log('================================');
-        
         if (req.session && req.session.userInfo) {
             res.json({
                 username: req.session.userInfo.username,
@@ -91,7 +72,6 @@ exports.checkAuthStatus = async(req,res) => {
             res.status(401).json({ isAuthenticated: false });
         }
     } catch(err) {
-        console.error('Check auth status error:', err);
         res.status(500).json({error: err.message})
     }
 }

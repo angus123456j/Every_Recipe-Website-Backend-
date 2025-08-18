@@ -21,9 +21,8 @@ const userAuth = require("./middleware/userAuth");
 
 // CORS configuration to allow credentialed requests from the frontend
 const corsOptions = {
-  origin: [process.env.CLIENT_URL, 'http://localhost:3000', 'https://localhost:3000'], // Support local and production
+  origin: process.env.CLIENT_URL,
   credentials: true,
-  optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
 app.use(express.json());
@@ -39,16 +38,14 @@ app.use(
     secret: "jkfwjenw",
     resave: false,
     saveUninitialized: false,
-    name: 'every-recipe-session', // Custom session name
     store: MongoStore.create({
       mongoUrl: process.env.MONGO_URI, // Use your MongoDB connection string
       collectionName: "sessions",
     }),
     cookie: {
-      httpOnly: false, // Set to false to allow frontend access for debugging
-      secure: false, // Must be false for HTTP backend
-      sameSite: 'lax', // Use lax instead of none for HTTP backend
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      httpOnly: true,
+      secure: false, // set to true behind HTTPS in production
+      sameSite: "lax",
     },
   })
 )
