@@ -63,6 +63,9 @@ exports.login = async(req,res) => {
 
 exports.checkAuthStatus = async(req,res) => {
     try {
+        console.log("Session:", req.session)
+        console.log("userinfo",req.session.userInfo)
+        console.log("sessionID", req.sessionID)
         if (req.session && req.session.userInfo) {
             res.json({
                 username: req.session.userInfo.username,
