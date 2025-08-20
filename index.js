@@ -50,17 +50,17 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
-      mongoUrl: process.env.MONGO_URI, // Use your MongoDB connection string
+      mongoUrl: process.env.MONGO_URI,
       collectionName: "sessions",
     }),
     cookie: {
       httpOnly: true,
-      secure: true, // set to true behind HTTPS in production
+      secure: true,
       sameSite: "none",
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
     },
   })
-)
-
+);
 
 
 //Routes (http://localhost:2356/recipes)
