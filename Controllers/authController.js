@@ -52,7 +52,11 @@ exports.login = async(req,res) => {
 
         
 
-        res.status(201).json({ message: "Successfully logged in" });
+        res.status(200).json({
+        message: "Successfully logged in",
+        user: req.session.userInfo,
+        });
+
 
     } catch(err) {
         res.status(401).json({ error: err.message });
