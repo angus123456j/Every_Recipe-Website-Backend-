@@ -25,6 +25,8 @@ const corsOptions = {
   credentials: true,
 };
 app.use(cors(corsOptions));
+
+
 app.use(express.json());
 
 
@@ -44,8 +46,8 @@ app.use(
     }),
     cookie: {
       httpOnly: true,
-      secure: false, // set to true behind HTTPS in production
-      sameSite: "lax",
+      secure: true, // set to true behind HTTPS in production
+      sameSite: "none",
     },
   })
 )
