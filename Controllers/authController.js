@@ -50,11 +50,13 @@ exports.login = async(req,res) => {
             refreshToken: tokens.RefreshToken,
         };
 
+
         
 
-        res.status(200).json({
-        message: "Successfully logged in",
-        user: req.session.userInfo,
+        req.session.save((err) => { if (err) { console.error('Session save error:', err); 
+        return res.status(500).json({ error: 'Session save failed' }); } 
+        console.log("Session saved successfully"); 
+        res.status(200).json({ message: "Successfully logged in", user: req.session.userInfo, }); 
         });
 
 
