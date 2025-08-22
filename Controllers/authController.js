@@ -42,15 +42,17 @@ exports.login = async(req,res) => {
 
         // Cognito returns tokens under AuthenticationResult
         const tokens = result.AuthenticationResult;
-
+        console.log("Username is:", username);
+        console.log("Tokens received:", tokens);
+        
         req.session.userInfo = {
             username,
             idToken: tokens.IdToken,
             accessToken: tokens.AccessToken,
             refreshToken: tokens.RefreshToken,
         };
-        
-        
+        console.log("info stored in session:", req.session);
+
        req.session.save(err => {
             if (err) {
                 console.error('Session save error:', err);
