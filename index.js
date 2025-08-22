@@ -42,12 +42,13 @@ app.use(express.json());
 
 //DB connections
 connectDB();
+app.set("trust proxy", 1);
 
 //Setting up session
 app.use(
   session({
     secret: "jkfwjenw",
-    resave: false,
+    resave: true,
     saveUninitialized: true,
     store: MongoStore.create({
       mongoUrl: process.env.MONGO_URI,
