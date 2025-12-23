@@ -49,7 +49,7 @@ npm run dev
 
 The API will be available at `http://localhost:<PORT>`.
 
-## API Endpoints 📡
+## API Endpoints
 
 | Method | Endpoint         | Description            |
 |--------|------------------|------------------------|
@@ -61,7 +61,7 @@ The API will be available at `http://localhost:<PORT>`.
 
 Note: Some routes may require authentication depending on your environment and middleware configuration.
 
-## Example Request/Response 🍽️
+## Example Request/Response
 
 ### Create a recipe
 
@@ -110,7 +110,7 @@ Error Response (example)
 }
 ```
 
-## Testing 🧪
+## Testing
 
 - Run the test suite:
 ```bash
