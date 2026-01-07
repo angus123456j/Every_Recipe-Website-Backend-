@@ -20,18 +20,29 @@ const parseArray = require("./middleware/parseInput");
 const userAuth = require("./middleware/userAuth");
 
 // CORS configuration to allow credentialed requests from the frontend
-/*const corsOptions = {
-  origin: true,
-  //process.env.CLIENT_URL,
-  credentials: true,
-};*/
+// Supports multiple origins (comma-separated in CLIENT_URL) or single origin
+const allowedOrigins = process.env.CLIENT_URL 
+  ? process.env.CLIENT_URL.split(',').map(origin => origin.trim())
+  : [];
 
 const corsOptions = {
-  origin: process.env.CLIENT_URL,
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // Check if origin is in allowed list
+    if (allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.warn('CORS blocked request from origin:', origin);
+      console.warn('Allowed origins:', allowedOrigins);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  };
+};
 
 app.use(cors(corsOptions));
 
