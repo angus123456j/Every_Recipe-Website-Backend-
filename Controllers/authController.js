@@ -55,10 +55,14 @@ exports.confirmSignUp = async(req,res) => {
             }
 
             console.log("Session saved successfully after confirmation");
+            console.log("Session ID:", req.sessionID);
             console.log("Session data:", req.session);
+            console.log("Set-Cookie header will be:", `connect.sid=${req.sessionID}; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=86400`);
+            
             res.status(201).json({ 
                 message: "Confirmed signup and successfully logged in", 
-                user: req.session.userInfo 
+                user: req.session.userInfo,
+                sessionId: req.sessionID // Include for debugging
             });
         });
     } else {
@@ -100,10 +104,14 @@ exports.login = async(req,res) => {
             }
 
             console.log("Session saved successfully");
+            console.log("Session ID:", req.sessionID);
             console.log("Session data:", req.session); // userInfo should appear here
+            console.log("Set-Cookie header will be:", `connect.sid=${req.sessionID}; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=86400`);
+            
             res.status(200).json({ 
                 message: "Successfully logged in", 
-                user: req.session.userInfo 
+                user: req.session.userInfo,
+                sessionId: req.sessionID // Include for debugging
             });
         });
 
@@ -117,9 +125,13 @@ exports.login = async(req,res) => {
 
 exports.checkAuthStatus = async(req,res) => {
     try {
-        console.log("Session:", req.session)
-        console.log("userinfo",req.session.userInfo)
-        console.log("sessionID", req.sessionID)
+        console.log("=== checkAuthStatus ===");
+        console.log("Session ID:", req.sessionID);
+        console.log("Cookies received:", req.headers.cookie);
+        console.log("Session:", req.session);
+        console.log("userinfo", req.session.userInfo);
+        console.log("Session keys:", Object.keys(req.session || {}));
+        
         if (req.session && req.session.userInfo) {
             res.json({
                 username: req.session.userInfo.username,

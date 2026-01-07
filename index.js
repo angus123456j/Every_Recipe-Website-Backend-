@@ -70,7 +70,9 @@ app.use(
       secure: true,
       sameSite: "none",
       maxAge: 1000 * 60 * 60 * 24, // 1 day
+      domain: undefined, // Let browser set domain automatically
     },
+    name: 'connect.sid', // Explicit cookie name
   })
 );
 
