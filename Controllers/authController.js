@@ -23,12 +23,49 @@ exports.signUp = async(req,res) => {
 exports.confirmSignUp = async(req,res) => {
     try{
     console.log("went into confirmSignup try block")
-    const{username, confirmationcode} = req.body
+    const{username, confirmationcode, password} = req.body
+    
+    // Confirm the signup first
     await authService.confirmSignUp({username,confirmationcode})
 
-    res.status(201).json({message: "Confirmed signup."})
+    // After successful confirmation, automatically log the user in
+    if (password) {
+        console.log("Auto-logging in user after confirmation:", username);
+        const result = await authService.login({ username, password });
+
+        // Cognito returns tokens under AuthenticationResult
+        const tokens = result.AuthenticationResult;
+        console.log("Username is:", username);
+        console.log("Tokens received:", tokens);
+        
+        req.session.userInfo = {
+            username,
+            idToken: tokens.IdToken,
+            accessToken: tokens.AccessToken,
+            refreshToken: tokens.RefreshToken,
+        };
+        console.log("info stored in session:", req.session);
+
+        req.session.save(err => {
+            if (err) {
+                console.error('Session save error:', err);
+                return res.status(500).json({ error: 'Session save failed' });
+            }
+
+            console.log("Session saved successfully after confirmation");
+            console.log("Session data:", req.session);
+            res.status(201).json({ 
+                message: "Confirmed signup and successfully logged in", 
+                user: req.session.userInfo 
+            });
+        });
+    } else {
+        // If no password provided, just confirm (for backward compatibility)
+        res.status(201).json({message: "Confirmed signup. Please log in."})
+    }
 
     } catch (err){
+        console.error("Confirm signup error:", err);
         res.status(400).json({error: err.message})
 
     }
