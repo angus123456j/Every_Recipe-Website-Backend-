@@ -24,9 +24,11 @@ exports.confirmSignUp = async(req,res) => {
     try{
     console.log("went into confirmSignup try block")
     const{username, confirmationcode, password} = req.body
+    console.log("ConfirmSignUp request - Username:", username, "Has password:", !!password, "Password length:", password?.length || 0)
     
     // Confirm the signup first
     await authService.confirmSignUp({username,confirmationcode})
+    console.log("Signup confirmed successfully for:", username)
 
     // After successful confirmation, automatically log the user in
     if (password) {
@@ -61,6 +63,7 @@ exports.confirmSignUp = async(req,res) => {
         });
     } else {
         // If no password provided, just confirm (for backward compatibility)
+        console.log("WARNING: No password provided in confirmSignUp for user:", username, "- User will need to log in manually")
         res.status(201).json({message: "Confirmed signup. Please log in."})
     }
 
