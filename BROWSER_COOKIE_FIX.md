@@ -26,7 +26,7 @@ Your backend is working correctly, but the browser is blocking cookies. This is 
 1. Chrome Settings → Privacy and security → Cookies and other site data
 2. Turn **OFF** "Block third-party cookies"
 3. **Refresh and try again**
-4. ⚠️ Note: This is less secure, but needed for cross-site cookies
+4. Note: This is less secure, but needed for cross-site cookies
 
 ### Safari (Mac/iOS)
 
@@ -98,9 +98,9 @@ When your frontend and backend are on **different domains** (cross-origin):
 - Backend: `https://every-recipe-53da6eac62e6.herokuapp.com`
 
 Browsers treat this as **cross-site** cookies, which requires:
-1. `SameSite=None` ✅ (backend has this)
-2. `Secure=true` ✅ (backend has this)
-3. **Browser must allow third-party/cross-site cookies** ❌ (this is the issue)
+1. `SameSite=None` (backend has this)
+2. `Secure=true` (backend has this)
+3. **Browser must allow third-party/cross-site cookies** (this is the issue)
 
 Modern browsers block third-party cookies by default for privacy. You need to explicitly allow them for your domains.
 
