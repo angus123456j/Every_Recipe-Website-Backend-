@@ -1,6 +1,6 @@
 # Debugging Checklist: Why Signup Works for You But Not Your Friend
 
-## 1. CORS Origin Check ⚠️ MOST LIKELY ISSUE
+## 1. CORS Origin Check MOST LIKELY ISSUE
 - [ ] Are you both accessing the frontend from the SAME URL?
   - You: `http://localhost:3000` or `https://yourdomain.com`?
   - Friend: `http://localhost:3000` or `https://yourdomain.com`?
