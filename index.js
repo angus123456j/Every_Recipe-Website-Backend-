@@ -49,11 +49,21 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 
-
+// Middleware to log Set-Cookie headers for debugging
+app.use((req, res, next) => {
+  const originalSetHeader = res.setHeader.bind(res);
+  res.setHeader = function(name, value) {
+    if (name.toLowerCase() === 'set-cookie') {
+      console.log('Set-Cookie header being sent:', value);
+    }
+    return originalSetHeader(name, value);
+  };
+  next();
+});
 
 //DB connections
 connectDB();
-app.set("trust proxy", 1);
+app.set("trust proxy", true); // Trust all proxies (needed for Google Cloud/Heroku proxy chain)
 
 //Setting up session
 app.use(
@@ -70,7 +80,7 @@ app.use(
       secure: true,
       sameSite: "none",
       maxAge: 1000 * 60 * 60 * 24, // 1 day
-      domain: undefined, // Let browser set domain automatically
+      // domain is not set - browser will handle it automatically
     },
     name: 'connect.sid', // Explicit cookie name
   })
